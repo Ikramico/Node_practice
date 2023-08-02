@@ -14,7 +14,7 @@ data.create('test', 'TestyFile',{name:'Ello', lastName:'Bilai'},
 }
 );
 //read data
-data.read('test', 'TestFile',
+data.read('test', 'TestyFile',
 (error, data)=>{
     console.log(error, data);
 }
@@ -25,6 +25,9 @@ data.update('test', 'TestyFile',{name:'Esky', lastName:'Biskyim'},
     console.log(`Error was ${error}`);
 }
 );
+data.delete('test', 'TestyFile', (error)=>{
+    console.log(error);
+})
 
 // create server
 app.createServer = () => {
