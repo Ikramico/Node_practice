@@ -25,8 +25,14 @@ handler.handleReqRes = (req, res )=>  {
 
     const decoder = new StringDecoder('utf-8');
     let realData = '';
-    const chosenHandler = routes[trimmedPath] ? routes[trimmedPath]: notFoundHandler;
-    chosenHandler(requestedProperties, (statusCode, payLoad) => {
+    var chosenHandler = routes[trimmedPath] ? routes[trimmedPath]: notFoundHandler;
+    
+    req.on('data', (buffer)=> {
+        realData += decoder.write(buffer);
+    });
+    req.on('end', ()=> {
+        realData += decoder.end();
+        chosenHandler = (statusCode, payLoad) => {
         statusCode = typeof(statusCode) === 'number'? statusCode : 500;
         payLoad = typeof(payLoad) === 'object'? payLoad : {};
 
@@ -35,14 +41,8 @@ handler.handleReqRes = (req, res )=>  {
         //return final response
         res.write(statusCode);
         res.end(payLoadString);
-    },
-    );
-    req.on('data', (buffer)=> {
-        realData += decoder.write(buffer);
-    });
-    req.on('end', ()=> {
-        realData += decoder.end();
-        console.log(realData);
+    };
+        
     res.end('Ello Bilai');
     })
     
