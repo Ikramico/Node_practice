@@ -25,26 +25,23 @@ handler.handleReqRes = (req, res )=>  {
 
     const decoder = new StringDecoder('utf-8');
     let realData = '';
-    var chosenHandler = routes[trimmedPath] ? routes[trimmedPath]: notFoundHandler;
+    const chosenHandler = routes[trimmedPath] ? routes[trimmedPath]: notFoundHandler;
     
     req.on('data', (buffer)=> {
         realData += decoder.write(buffer);
     });
     req.on('end', ()=> {
         realData += decoder.end();
-        chosenHandler = (statusCode, payLoad) => {
+        chosenHandler(requestedProperties, (statusCode, payLoad) => {
         statusCode = typeof(statusCode) === 'number'? statusCode : 500;
         payLoad = typeof(payLoad) === 'object'? payLoad : {};
 
         const payLoadString = JSON.stringify(payLoad);
 
         //return final response
-        res.write(statusCode);
+        res.writeHead(statusCode);
         res.end(payLoadString);
-    };
-        
-    res.end('Ello Bilai');
-    })
-    
+    });
+    });
 };
 module.exports = handler;

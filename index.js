@@ -25,6 +25,7 @@ data.update('test', 'TestyFile',{name:'Esky', lastName:'Biskyim'},
     console.log(`Error was ${error}`);
 }
 );
+//delete data
 data.delete('test', 'TestyFile', (error)=>{
     console.log(error);
 })
