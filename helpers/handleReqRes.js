@@ -2,6 +2,7 @@
 const {StringData, StringDecoder} = require ('string_decoder');
 const url = require('url');
 const routes = require('./routes');
+const {parseJSON} = require('../helpers/utilities');
 const {notFoundHandler} = require('../handlers/routeHandlers/notFoundHandlers')
 
 const handler = {};
@@ -32,6 +33,8 @@ handler.handleReqRes = (req, res )=>  {
     });
     req.on('end', ()=> {
         realData += decoder.end();
+         requestedProperties.body = parseJSON(realData);
+
         chosenHandler(requestedProperties, (statusCode, payLoad) => {
         statusCode = typeof(statusCode) === 'number'? statusCode : 500;
         payLoad = typeof(payLoad) === 'object'? payLoad : {};
